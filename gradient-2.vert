@@ -9,47 +9,46 @@ out vec4 frontColor;
 out vec2 vtexCoord;
 
 uniform mat4 modelViewProjectionMatrix;
-uniform mat4 modelViewMatrix;
 uniform mat3 normalMatrix;
+
+uniform vec3 boundingBoxMin;
+uniform vec3 boundingBoxMax;
 
 void main()
 {
-	vtexCoord = texCoord;
     gl_Position = modelViewProjectionMatrix * vec4(vertex, 1.0);
-
-    vec3 top; 
-    vec3 bottom;
-    float a;    
-    
-    float b = gl_Position.y/gl_Position.w + 1.0;
-    b = b / 2.0;
-    if(b>=0 && b < 0.25)
-    {
-		bottom = vec3(1.0,0.0,0.0);
-		top = vec3(1.0,1.0,0.0);
-		a = fract(b/0.25);
+	//  y coordinates in NDC -1 .. 1
+	float a = ((gl_Position.y/gl_Position.w)+1.0)/2.0;    //  a = 0...1
+	
+	vec3 colorRed    = vec3(1.0, 0.0, 0.0);	
+	vec3 colorYellow = vec3(1.0, 1.0, 0.0);	
+	vec3 colorGreen  = vec3(0.0, 1.0, 0.0);	
+	vec3 colorCian   = vec3(0.0, 1.0, 1.0);	
+	vec3 colorBlue   = vec3(0.0, 0.0, 1.0);
+	
+	vec3 color;
+	if(a/0.25 < 1)
+	{
+		float b = fract(a/0.25);
+		color = mix(colorRed, colorYellow, b); 
 	}
-    else if(b>=0.25 && b < 0.5)
-    {
-		top = vec3(0.0,1.0,0.0);
-		bottom = vec3(1.0,1.0,0.0);
-		a = fract(b/0.25);
+	else if(a/0.25 < 2)
+	{
+		float b = fract(a/0.25);
+		color = mix(colorYellow, colorGreen, b);
 	}
-    
-    else if(b>=0.5 && b < 0.75)
-    {
-		top = vec3(0.0,1.0,1.0);
-		bottom = vec3(0.0,1.0,0.0);
-		a = fract(b/0.25);
+	else if(a/0.25 < 3)
+	{
+		float b = fract(a/0.25);
+		color = mix(colorGreen, colorCian, b);
 	}
-    else if(b>=0.75 && b <= 1)
-    {
-		top = vec3(0.0,0.0,1.0);
-		bottom = vec3(0.0,1.0,1.0);
-		a = (b-0.25*3)/0.25;
+	else
+	{
+		float b = fract(a/0.25);
+		if(a >= 1.0) b = 1.0;
+		color = mix(colorCian, colorBlue, b);
 	}
-    
-    vec3 gradientColor = mix(bottom, top, a);
-    
-    frontColor = vec4(gradientColor,1.0);
+	
+    frontColor = vec4(color,1.0);
+    vtexCoord = texCoord;
 }
