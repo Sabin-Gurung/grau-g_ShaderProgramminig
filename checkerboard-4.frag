@@ -9,7 +9,7 @@ uniform float n = 8;
 
 void main()
 {
-	vec3 colorBlack = vec3 (0.0, 0.0, 0.0);
+	vec3 colorRed = vec3 (1.0, 0.0, 0.0);
 	vec3 colorGrey = vec3 (0.8, 0.8, 0.8);
 	vec3 newColor;
 
@@ -19,11 +19,11 @@ void main()
 	float margin = 0.1;
 	if (a < margin || b < margin)
 	{
-		newColor = colorBlack;
+		newColor = colorRed;
 	}
 	else
 	{
-		newColor = colorGrey;
+		discard;
 	}
 
 	fragColor = vec4 (newColor, 1.0);
