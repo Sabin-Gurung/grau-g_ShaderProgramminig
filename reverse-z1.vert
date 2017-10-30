@@ -16,9 +16,11 @@ void main()
     vec3 N = normalize(normalMatrix * normal);
     frontColor = vec4(color,1.0);
     vtexCoord = texCoord;
-    gl_Position = modelViewProjectionMatrix * vec4(vertex, 1.0);
+    gl_Position = modelViewProjectionMatrix * vec4(vertex, 1.0) * vec4 (1.0, 1.0, -1.0, 1.0);
+		/*
 		float z = gl_Position.z / gl_Position.w;
 		z = z * -1.0;
 		z = z * gl_Position.w;
 		gl_Position.z = z;
+		*/
 }
