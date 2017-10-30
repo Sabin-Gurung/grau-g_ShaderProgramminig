@@ -9,16 +9,12 @@ out vec4 frontColor;
 out vec2 vtexCoord;
 
 uniform mat4 modelViewProjectionMatrix;
-uniform mat4 viewProjectionMatrix;
-uniform mat4 modelMatrix;
 uniform mat3 normalMatrix;
 
 void main()
 {
-	vec3 N = normalize(normalMatrix * normal);
-	frontColor = vec4(color,1.0) * N.z;
-	vtexCoord = texCoord;
-
-	vec3 nouVertex = normalize((modelMatrix * vec4(vertex, 1.0)).xyz);
-	gl_Position = modelViewProjectionMatrix * vec4(nouVertex, 1.0);
+    vec3 N = normalize(normalMatrix * normal);
+    frontColor = vec4(N.z);
+    vtexCoord = texCoord;
+    gl_Position = modelViewProjectionMatrix * vec4(vertex, 1.0);
 }
