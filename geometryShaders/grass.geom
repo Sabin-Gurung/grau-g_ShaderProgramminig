@@ -6,14 +6,15 @@ layout(triangle_strip, max_vertices = 36) out;
 in vec3 vNormal[];
 
 out vec3 gNormal;
+out vec3 gPos;
 
 uniform mat4 modelViewProjectionMatrix; 
-uniform mat3 normalMatrix;
 uniform float d = 0.1;
 
 void createVertex (vec3 p_vertex, vec3 p_normal)
 {
-	gNormal     = normalize (normalMatrix * p_normal);
+	gNormal     = p_normal;
+	gPos        = p_vertex;
 	gl_Position = modelViewProjectionMatrix * vec4 (p_vertex, 1.0);
 	EmitVertex();
 }
@@ -48,11 +49,6 @@ void main( void )
 	createVertex (a1, midNormal);
 	createVertex (a2, midNormal);
 	createVertex (a3, midNormal);
-	EndPrimitive();
-	// top
-	createVertex (b1, midNormal);
-	createVertex (b2, midNormal);
-	createVertex (b3, midNormal);
 	EndPrimitive();
 	// face1
 	vec3 n = calculateNormal (a1, a2, b1);
